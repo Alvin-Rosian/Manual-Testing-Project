@@ -1,96 +1,276 @@
-# Manual-Testing-Project
+Database Project for Biblioteca
+The scope of this project is to use all the SQL knowledge gained throught the Software Testing course and apply them in practice.
 
-Testing Project for **Inserati aici numele aplicatiei pe care o testati**
-The scope of the final project for ITF Manual Testing Course is to use all gained knowledge throught the course and apply them in practice, using a live application
+Tools used: MySQL Workbench
 
-Application under test: Inserati aici numele aplicatiei pe care o testati
+Database description: I created a databese for a library conaining 5 tabels:Autori; Carti; Utlizatori; Imprumuturi; Recenzii.
 
-Tools used: Jira, Zephyr Squad.
 
-Functional specifications:
-The below story (daca aveti mai multe scrieti stories) was created in Jira and describes the functional specifications of the "nume_modul" module, for which the final project is performed upon.
+Database Schema
 
-inserati aici fie poza cu story-ul / story-urile daca aveti mai putine, dar daca aveti mai mult de doua recomand sa descarcati story-urile din jira si sa le incarcati ca fisier
+Table Autori
+Primary key: AutorID
 
-Here you can find the release that was created for this project:
+Table Carti
+Primary key: CarteID
+Foreign key: AutorID referring to Autori(AutorID)
 
-(inserati aici o poza cu release-ul pe care l-ati creat in jira. Atentie, release-ul nu va contine si teste, ci doar epic-uri, story-uri, task-uri, subtaskuri si bug-uri)
+Table Utilizatori
+Primary key: UtilizatorID
 
-Testing process
-The test process was performed based on the standard test process as described below.
+Table Imprumuturi
+Primary key: ImprumutID
+Foreign key: UtilizatorID referring to Utilizatori(UtilizatorID)
+Foreign key: CarteID referring to Carti(CarteID)
 
-1.1 Test planning
-The Test Plan is designed to describe all details of testing for all the modules from the JPetStore Demo application.
+Table Recenzii
+Primary key: RecenzieID
+Foreign key: CarteID referring to Carti(CarteID)
+Foreign key: UtilizatorID referring to Utilizatori(UtilizatorID)
 
-The plan identifies the items to be tested, the features to be tested, the types of testing to be performed, the personnel responsible for testing, the resources and schedule required to complete testing, and the risks associated with the plan. The test plan that was created for this project can be found here (inserati link catre documentul cu planul de testare)
+You can find below the database schema that was generated through Reverse Engineer and which contains all the tables and the relationships between them.
+The tables are connected in the following way:
 
-1.1.1. Roles asigned to the project and persons allocated
-(numele persoanelor pot sa fie fictive, doar sa treceti numele vostru ca si tester)
+**Carti ** is connected with **Autori ** through a 1:1 relationship which was implemented through Autori.AutorID as a primary key and Carti.AutorID as a foreign key
 
-Project manager
-Product owner
-Software developer
-QA Engineer
-1.1.2 Entry criteria defined
-(enumerati aici toate criteriile de intrare pe care le-ati definit pentru proiectul vostru)
+**Imprumuturi ** is connected with **Utilizatori ** through a 1:1 relationship which was implemented through Utilizatori.UtilizatorID as a primary key and Imprumuturi.UtilizatorID as a foreign key
 
-1.1.3 Exit criteria defined
-(enumerati aici toate criteriile de iesire pe care le-ati definit pentru proiectul vostru)
+**Imprumuturi ** is connected with **Carti ** through a 1:1 relationship which was implemented through  Carti.CarteID as a primary key and Imprumuturi.CarteID as a foreign key
 
-1.1.4 Test scope
-Tests in scope:
-(descrieti aici toate testele pe care intentionati sa le faceti. Puteti include functionalitati din aplicatie, tipuri sau tehnici de testare, dispozitive pe care veti testa etc)
+**Recenzii ** is connected with **Utilizatori ** through a 1:1 relationship which was implemented through Utilizatori.UtilizatorID as a primary key and Recenzii.UtilizatorID as a foreign key
 
-Tests not in scope:
-(descrieti aici toate testele pe care NU intentionati sau nu puteti sa le faceti. Puteti include functionalitati din aplicatie, tipuri sau tehnici de testare, dispozitive pe care veti testa etc)
+**Recenzii ** is connected with **Carti** through a 1:1 relationship which was implemented through Carti.CarteID as a primary key and Recenzii.CarteID as a foreign key
 
-1.1.5 Risks detected
-Project risks:
-(enumerati aici toate riscurile de proiect pe care le-ati identificat pentru proiectul vostru)
 
-Product risks:
-(enumerati aici toate riscurile de produs pe care le-ati identificat pentru proiectul vostru)
+Database Queries
 
-1.1.6 Evaluating entry criteria
-The entry criteria defined in the Test Planning phase have been achieved and the test process can continue.
+DDL (Data Definition Language)
+The following instructions were written in the scope of CREATING the structure of the database (CREATE INSTRUCTIONS)
 
-1.2 Test Monitoring and Control
-(inserati aici motivul pentru care a fost facuta etapa de monitorizare si control si respectiv cum s-a facut aceasta etapa. Aici veti insera de asemenea si raportul de status (test status report) din zephyr - test metrics - primul din lista care sa reflecte activitatea si evolutia testarii. Recomand aici sa executati teste aproape in fiecare zi ca sa vada angajatorul implicarea voastra in testare)
+create database biblioteca;
+use biblioteca;
 
-1.3 Test Analysis
-The testing process will be executed based on the application requirements. (The requirements analysis has been done in order to implement the early testing test principle and the results can be found here - inserati linkul catre documentul de review. Parte asta specificata intre paranteze o puneti doar daca aveti cerinte si daca ati facut review).
+CREATE TABLE Autori (
+    AutorID INT PRIMARY KEY AUTO_INCREMENT,
+    Nume VARCHAR(100) NOT NULL,
+    Prenume VARCHAR(100) NOT NULL,
+    DataNasterii DATE
+);
 
-The following test conditions were found:
+CREATE TABLE Carti (
+    CarteID INT PRIMARY KEY AUTO_INCREMENT,
+    Titlu VARCHAR(200) NOT NULL,
+    Gen VARCHAR(100),
+    AnPublicare YEAR,
+    AutorID INT,
+    FOREIGN KEY (AutorID) REFERENCES Autori(AutorID)
+);
 
-(aici puteti fie sa puneti o poza din jira cu titlurile tuturor testelor - din issues filtrare dupa type test sau sa scrieti cu bulinuta numele fiecarei conditii de testare pe care ati identificat-o)
+CREATE TABLE Utilizatori (
+    UtilizatorID INT PRIMARY KEY AUTO_INCREMENT,
+    Nume VARCHAR(100) NOT NULL,
+    Prenume VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL
+);
 
-1.4 Test Design
-Functional test cases were created in Zephyr Squad based on the analysis of the specifications. The test cases can be accessed here (inserati linkul catre fisierul cu testele, in format pdf, word sau csv)
+CREATE TABLE Imprumuturi (
+    ImprumutID INT PRIMARY KEY AUTO_INCREMENT,
+    UtilizatorID INT,
+    CarteID INT,
+    DataImprumut DATE,
+    DataReturnare DATE,
+    FOREIGN KEY (UtilizatorID) REFERENCES Utilizatori(UtilizatorID),
+    FOREIGN KEY (CarteID) REFERENCES Carti(CarteID)
+);
 
-1.5 Test Implementation
-The following elements are needed to be ready before the test execution phase begins:
+CREATE TABLE Recenzii (
+    RecenzieID INT PRIMARY KEY AUTO_INCREMENT,
+    CarteID INT,
+    UtilizatorID INT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    Comentariu TEXT,
+    DataRecenzie DATE,
+    FOREIGN KEY (CarteID) REFERENCES Carti(CarteID),
+    FOREIGN KEY (UtilizatorID) REFERENCES Utilizatori(UtilizatorID)
+);
 
-(inserati lista de elemente care sunt evaluate in etapa de implementare)
+DML (Data Manipulation Language)
+In order to be able to use the database I populated the tables with various data necessary in order to perform queries and manipulate the data. In the testing process, this necessary data is identified in the Test Design phase and created in the Test Implementation phase.
 
-1.6. Test Execution
-Test cases are executed on the created test Cycle summary: (inserati aici numele cycle-ului pe care l-ati creat)
+Below you can find all the insert instructions that were created in the scope of this project:
 
-Bugs have been created based on the failed tests. The complete bug reports can be found here: (inserati aici fisierul cu bug-urile pe care le-ati identificat)
+INSERT INTO Autori (Nume, Prenume, DataNasterii) VALUES
+('Rowling', 'J.K.', '1965-07-31'),
+('Tolkien', 'J.R.R.', '1892-01-03'),
+('Martin', 'George R.R.', '1948-09-20'),
+('Austen', 'Jane', '1775-12-16'),
+('Shakespeare', 'William', '1564-04-26'),
+('Orwell', 'George', '1903-06-25'),
+('Hemingway', 'Ernest', '1899-07-21'),
+('Fitzgerald', 'F. Scott', '1896-09-24'),
+('Dickens', 'Charles', '1812-02-07'),
+('Huxley', 'Aldous', '1894-07-26'),
+('Verne', 'Jules', '1828-02-08'),
+('Dostoevsky', 'Fyodor', '1821-11-11'),
+('Kafka', 'Franz', '1883-07-03'),
+('Joyce', 'James', '1882-02-02'),
+('Poe', 'Edgar Allan', '1809-01-19'),
+('Homer', 'S', '800-01-01'),
+('Hugo', 'Victor', '1802-02-26'),
+('Steinbeck', 'John', '1902-02-27'),
+('Christie', 'Agatha', '1890-09-15'),
+('King', 'Stephen', '1947-09-21');
 
-The following is a summary of the bugs that have been found (inserati o lista cu titlurile bug-urilor identificate impreuna cu prioritatea si severitatea fiecaruia)
+INSERT INTO Carti (Titlu, Gen, AnPublicare, AutorID) VALUES
+('Harry Potter and the Philosopher\'s Stone', 'Fantasy', 1997, 1),
+('Harry Potter and the Chamber of Secrets', 'Fantasy', 1998, 1),
+('The Hobbit', 'Fantasy', 1937, 2),
+('The Fellowship of the Ring', 'Fantasy', 1954, 2),
+('A Game of Thrones', 'Fantasy', 1996, 3),
+('A Clash of Kings', 'Fantasy', 1998, 3),
+('Pride and Prejudice', 'Romance', 1951, 4),
+('1984', 'Dystopian', 1949, 6),
+('Animal Farm', 'Satire', 1945, 6),
+('The Great Gatsby', 'Tragedy', 1925, 8),
+('Brave New World', 'Dystopian', 1932, 10),
+('Moby Dick', 'Adventure', 1940, 7),
+('War and Peace', 'Historical', 1969, 12),
+('The Odyssey', 'Epic', 1920, 16),
+('Les Misérables', 'Historical', 1962, 17),
+('The Grapes of Wrath', 'Historical', 1939, 18),
+('Murder on the Orient Express', 'Mystery', 1934, 19),
+('The Shining', 'Horror', 1977, 20),
+('It', 'Horror', 1986, 20),
+('The Catcher in the Rye', 'Literary', 1951, 14);
 
-Full regression testing is needed on the impacted areas after the bugs are fixed and retesting will be done for every functionality that was previously failed.
+INSERT INTO Utilizatori (Nume, Prenume, Email) VALUES
+('Popescu', 'Ion', 'ion.popescu@example.com'),
+('Ionescu', 'Maria', 'maria.ionescu@example.com'),
+('Georgescu', 'Andrei', 'andrei.georgescu@example.com'),
+('Dumitrescu', 'Elena', 'elena.dumitrescu@example.com'),
+('Mihai', 'Vasile', 'vasile.mihai@example.com'),
+('Constantinescu', 'Adriana', 'adriana.constantinescu@example.com'),
+('Radu', 'Alexandru', 'alexandru.radu@example.com'),
+('Stan', 'Ana', 'ana.stan@example.com'),
+('Marin', 'Daniel', 'daniel.marin@example.com'),
+('Tudor', 'Cristina', 'cristina.tudor@example.com'),
+('Nicolae', 'Gabriel', 'gabriel.nicolae@example.com'),
+('Iliescu', 'Simona', 'simona.iliescu@example.com'),
+('Barbu', 'Catalin', 'catalin.barbu@example.com'),
+('Enache', 'Laura', 'laura.enache@example.com'),
+('Serban', 'Mihai', 'mihai.serban@example.com'),
+('Nita', 'Raluca', 'raluca.nita@example.com'),
+('Dragomir', 'Paul', 'paul.dragomir@example.com'),
+('Sandu', 'Oana', 'oana.sandu@example.com'),
+('Dobre', 'Cosmin', 'cosmin.dobre@example.com'),
+('Gheorghe', 'Irina', 'irina.gheorghe@example.com');
 
-1.7 Test Completion
-As the Exit criteria were met and satisfied as mentioned in the appropriate section, this feature is suggested to ‘Go Live’ by the Testing team
-The traceability matrix was generated and can be found here: (inserati aici fie o poza cu matricea de trasabilitate din jira, fie linkul catre fiserul excel exportat din jira cu matricea de trasabilitate. Nu uitati sa faceti filtrare dupa type = story)
+INSERT INTO Imprumuturi (UtilizatorID, CarteID, DataImprumut, DataReturnare) VALUES
+(1, 161, '2024-01-15', '2024-02-15'),
+(2, 162, '2024-01-20', NULL),
+(3, 163, '2024-02-01', '2024-02-21'),
+(4, 164, '2024-02-05', '2024-03-01'),
+(5, 165, '2024-03-10', '2024-03-25'),
+(6, 166, '2024-03-15', NULL),
+(7, 167, '2024-04-01', '2024-04-20'),
+(8, 168, '2024-04-10', '2024-04-30'),
+(9, 169, '2024-05-01', '2024-05-20'),
+(10, 170, '2024-05-15', NULL),
+(11, 171, '2024-06-01', '2024-06-15'),
+(12, 172, '2024-06-10', '2024-06-25'),
+(13, 173, '2024-07-01', '2024-07-20'),
+(14, 174, '2024-07-10', '2024-07-30'),
+(15, 175, '2024-08-01', '2024-08-20'),
+(16, 176, '2024-08-10', '2024-08-30'),
+(17, 177, '2024-09-01', '2024-09-20'),
+(18, 178, '2024-09-10', '2024-09-30'),
+(19, 179, '2024-10-01', '2024-10-20'),
+(20, 180, '2024-10-10', '2024-10-30');
 
-Test execution chart was generated and can be found below.
+INSERT INTO Recenzii (CarteID, UtilizatorID, Rating, Comentariu, DataRecenzie) VALUES
+(161, 1, 5, 'Amazing book!', '2024-01-25'),
+(162, 2, 4, 'Great read, but a bit slow at times.', '2024-01-30'),
+(163, 3, 5, 'An absolute classic!', '2024-02-15'),
+(164, 4, 5, 'Fantastic!', '2024-02-25'),
+(165, 5, 4, 'Really enjoyed it.', '2024-03-20'),
+(166, 6, 3, 'Good, but not as good as the first one.', '2024-03-30'),
+(167, 7, 5, 'A must-read for everyone.', '2024-04-15'),
+(168, 8, 4, 'Thought-provoking.', '2024-04-25'),
+(169, 9, 5, 'Could not put it down!', '2024-05-10'),
+(170, 10, 3, 'Interesting, but a bit dated.', '2024-05-20'),
+(171, 11, 5, 'Incredible storytelling.', '2024-06-05'),
+(172, 12, 4, 'Very enjoyable.', '2024-06-15'),
+(173, 13, 5, 'A work of genius.', '2024-07-05'),
+(174, 14, 5, 'Timeless.', '2024-07-15'),
+(175, 15, 4, 'Highly recommend.', '2024-08-05'),
+(176, 16, 3, 'Not my cup of tea.', '2024-08-15'),
+(177, 17, 5, 'Masterpiece.', '2024-09-05'),
+(178, 18, 4, 'Very good.', '2024-09-15'),
+(179, 19, 5, 'Outstanding.', '2024-10-05'),
+(180, 20, 4, 'Solid read.', '2024-10-15');
 
-(inserati aici raportul de executie generat din jira din sectiunea de dashboards)
 
-The final report shows that a number (inserati numarul de teste) tests have failed of a total of (inserati numarul de teste)
+DQL (Data Query Language)
 
-A number of (inserati numarul de bug-uri) total bugs were found, from which the priority is: (inserati numarul de bug-uri) are high and (inserati numarul de bug-uri) are medium.
+In order to simulate various scenarios that might happen in real life I created the following queries that would cover multiple potential real-life situations:
 
-(inserati aici o concluzie generala a testarii care sa cuprinda cate teste au fost create si executate, ce procentaj aproximativ din cerintele in scop au fost acoperite, daca exista vreo functionalitate pe care nu ai apucat sa o testezi, daca bug-urile gasite impacteaza lansarea produsului in productie sau se pot fixa si ulterior, daca ai identificat riscuri de produs care trebuie mitigate, daca e vreo reecomandare pe care vrei sa o faci pentru lansare, daca sunt ceva lessons learned de care trebuie sa se tina cont la proiectele viitoare etc.)
+SELECT * FROM Carti;
+
+SELECT * FROM Carti WHERE Gen = 'Fantasy';
+
+SELECT * FROM Utilizatori WHERE Nume = 'Ionescu' OR Nume = 'Popescu';
+
+SELECT Utilizatori.Nume, Utilizatori.Prenume, Imprumuturi.DataReturnare
+FROM Utilizatori
+INNER JOIN Imprumuturi ON Utilizatori.UtilizatorID = Imprumuturi.UtilizatorID
+WHERE YEAR(Imprumuturi.DataReturnare) = 2024;
+
+SELECT Gen, COUNT(*) AS NumarCarti FROM Carti GROUP BY Gen;
+
+SELECT Gen, COUNT(*) AS NumarCarti FROM Carti GROUP BY Gen HAVING COUNT(*) > 1;
+
+SELECT Imprumuturi.ImprumutID, Utilizatori.Nume, Utilizatori.Prenume
+FROM Imprumuturi
+LEFT JOIN Utilizatori ON Imprumuturi.UtilizatorID = Utilizatori.UtilizatorID;
+
+SELECT Carti.Titlu, Imprumuturi.DataImprumut, Imprumuturi.DataReturnare
+FROM Carti
+RIGHT JOIN Imprumuturi ON Carti.CarteID = Imprumuturi.CarteID;
+
+SELECT * FROM Carti ORDER BY AnPublicare DESC;
+
+SELECT Utilizatori.Nume, Utilizatori.Prenume
+FROM Utilizatori
+WHERE UtilizatorID IN (
+    SELECT Imprumuturi.UtilizatorID
+    FROM Imprumuturi
+    INNER JOIN Carti ON Imprumuturi.CarteID = Carti.CarteID
+    WHERE Carti.AutorID = (SELECT AutorID FROM Autori WHERE Nume = 'Tolkien')
+);
+
+SELECT 
+    a.Nume AS NumeAutor, 
+    a.Prenume AS PrenumeAutor, 
+    COUNT(c.CarteID) AS NumărCărți
+FROM 
+    Autori a
+LEFT JOIN 
+    Carti c ON a.AutorID = c.AutorID
+GROUP BY 
+    a.AutorID;
+    
+    SELECT 
+    c.Titlu AS TitluCarte, 
+    AVG(r.Rating) AS RatingMediu
+FROM 
+    Carti c
+INNER JOIN 
+    Recenzii r ON c.CarteID = r.CarteID
+GROUP BY 
+    c.CarteID
+HAVING 
+    AVG(r.Rating) >= 4;
+    
+
+Conclusions
+Inserati aici o concluzie cu privire la ceea ce ati lucrat, gen lucrurile pe care le-ati invatat, lessons learned, un rezumat asupra a ceea ce ati facut si orice alta informatie care vi se pare relevanta pentru o concluzie finala asupra a ceea ce ati lucrat
