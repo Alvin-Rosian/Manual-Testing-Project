@@ -271,6 +271,3 @@ GROUP BY
 HAVING 
     AVG(r.Rating) >= 4;
     
-
-Conclusions
-Inserati aici o concluzie cu privire la ceea ce ati lucrat, gen lucrurile pe care le-ati invatat, lessons learned, un rezumat asupra a ceea ce ati facut si orice alta informatie care vi se pare relevanta pentru o concluzie finala asupra a ceea ce ati lucrat
