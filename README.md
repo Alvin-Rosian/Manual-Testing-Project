@@ -271,3 +271,6 @@ GROUP BY
 HAVING 
     AVG(r.Rating) >= 4;
     
+Caonclusions:
+
+In conclusion I would like to say that this project helped improve my SQL skills a lot taking me out of my comfort zone as a first SQL project created. The knowledge acquired trough out it built a strong understanding of the bases of SQL and I could say that I can't wait for the next project.
